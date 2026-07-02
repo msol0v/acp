@@ -61,11 +61,14 @@ bool SerialArincTransport::sendWord(quint32 word){
 }
 
 void SerialArincTransport::onReadyRead(){
-    QByteArray line = serial_->readLine();
-    if (line.startsWith("dat")){
-        QByteArray word = line.mid(4,4);
-        emit arincWordReceived(word);
+    while (serial_->canReadLine())
+    {
+        QByteArray line = serial_->readLine();
+        if (line.startsWith("dat")){
+            QByteArray word = line.mid(4,4);
+            emit arincWordReceived(word);
+        }
+        else
+            emit serviceMessageReceived(line);
     }
-    else
-        emit serviceMessageReceived(line);
 }

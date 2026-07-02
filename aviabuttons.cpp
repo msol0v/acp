@@ -70,9 +70,9 @@ AviaCallButton::AviaCallButton(QWidget *parent, const QString &text)
 void AviaCallButton::startTextBlink() { m_textBlinkEnabled = true; update(); }
 void AviaCallButton::stopTextBlink() { m_textBlinkEnabled = false; m_textBlinkVisible = true; update(); }
 
-void AviaCallButton::setBlinkVisible(bool visible) {
+void AviaCallButton::setBlinkVisible(bool state) {
     if (!m_textBlinkEnabled) return;
-    m_textBlinkVisible = visible;
+    m_textBlinkVisible = state;
     update();
 }
 

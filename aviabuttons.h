@@ -43,11 +43,13 @@ public:
 
     void startTextBlink();
     void stopTextBlink();
-    void setBlinkVisible(bool visible);
+
 
     void barsOn();
     void barsOff();
     void setBars(bool state);
+public slots:
+    void setBlinkVisible(bool state);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

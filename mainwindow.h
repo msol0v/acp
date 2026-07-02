@@ -49,16 +49,26 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    QHash<const QString, ChannelWidgetWrapper*> chan_wrappers_table;
+    QMap<const QString, ChannelWidgetWrapper*> chan_wrappers_table;
     QVector<AviaCallButton*> tx_code_btns_table;
+    QButtonGroup *btnGroup;
+
+    QTimer *blink_timer;
+    bool blink_state; //Без глобального состояния блинка будет рассинхрон мигания
 
 public slots:
     void showErrors(QVector<quint8> errors);
     void showChanStates(const QString chan_name, quint8 chan_state, quint8 volume_state);
     void showTxCode(quint8 tx_code);
-    void toggledBtn(bool state);
+    void toggledBtn(QAbstractButton *button, bool checked);
 
 signals:
-    void sigChangeAmuChannel(quint8 tx_code);
+    void btnBlink(bool state);
+    void sigChangeAmuChannel(quint8 amu_chan);
+    void sigChangeSelCal(int chan_idx, bool state);
+    void sigChangePinProg(int bit, bool state);
+    void sigChangeMech(quint8 state);
+    void sigChangeAtt(quint8 state);
+    //void sigChangeVoice(quint8 state);
 };
 #endif // MAINWINDOW_H

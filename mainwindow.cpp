@@ -27,12 +27,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(handler_arinc, &ArincHandler::sigVoice, ui->btnVoice, &AviaDualTextButton::topOn);
 
     //MainW singals
-    connect(this, &MainWindow::sigChangeAmuChannel, handler_arinc,&ArincHandler::changeAmuChannel);
+    connect(this, &MainWindow::sigChangeSelCal, handler_arinc,&ArincHandler::changeSelCal);
+    connect(this, &MainWindow::sigChangePinProg, handler_arinc, &ArincHandler::changePinProg);
+    connect(this, &MainWindow::sigChangeMech, handler_arinc, &ArincHandler::changeMechState);
+    connect(this, &MainWindow::sigChangeAtt, handler_arinc, &ArincHandler::changeAttState);
 
     //UI slots
-    QButtonGroup *btnGroup = new QButtonGroup(this);
-    for (auto btn: findChildren<AviaLampToggleButton*>())
-        btnGroup->addButton(btn);
+    btnGroup = new QButtonGroup(this);
+    quint8 id = 0;
+    for (auto btn: findChildren<AviaLampToggleButton*>()){
+        btnGroup->addButton(btn, id++);
+    }
+    btnGroup->setExclusive(false);
     connect(btnGroup, &QButtonGroup::buttonToggled, this, &MainWindow::toggledBtn);
 
     chan_wrappers_table = {
@@ -64,6 +70,23 @@ MainWindow::MainWindow(QWidget *parent)
         ui->btnPA
     };
 
+    // BLINK CALL BUTTONS
+    blink_state = true;
+    blink_timer = new QTimer;
+    blink_timer->setInterval(250);
+    connect(blink_timer, &QTimer::timeout, this,
+            [&]()
+            {
+                blink_state=!blink_state;
+                emit btnBlink(blink_state);
+            }
+            );
+    for (AviaCallButton *btnCall : tx_code_btns_table){
+        connect(this,&MainWindow::btnBlink, btnCall, &AviaCallButton::setBlinkVisible);
+    }
+    blink_timer->start();
+
+
     thread_arinc->start();
 }
 
@@ -93,8 +116,31 @@ void MainWindow::showChanStates(const QString chan_name, quint8 chan_state, quin
     wrapper->label->setText(QString::number(volume_state));
 }
 
-void MainWindow::toggledBtn(bool state){
-    qDebug() << "state" << state;
+void MainWindow::toggledBtn(QAbstractButton *button, bool checked){
+    AviaLampToggleButton *btn = qobject_cast<AviaLampToggleButton*>(button);
+    checked ? btn->lampOn() : btn->lampOff();
+    int id_btn = btnGroup->id(btn);
+    if (id_btn > 6){ //Calls
+        emit sigChangeSelCal(id_btn - 7, checked); // В любом случае делаем вызов
+        if (id_btn > 8 && id_btn < 12){
+            if (!(btnGroup->button(id_btn - 9))->isChecked())
+                return; // Если пин прог этого канала не выставлен, выходим, мигание вызова на АСР не нужно
+        }
+
+        AviaCallButton *call_btn = tx_code_btns_table[id_btn - 7];
+        checked ? call_btn->startTextBlink() : call_btn->stopTextBlink();
+
+        if (id_btn == 12){
+            emit sigChangeMech(static_cast<quint8>(checked));
+            return;
+        }
+        if (id_btn == 13){
+            emit sigChangeAtt(static_cast<quint8>(checked));
+            return;
+        }
+    }else{
+        emit sigChangePinProg(id_btn, checked);
+    }
 }
 
 void MainWindow::showTxCode(quint8 tx_code){
@@ -111,6 +157,6 @@ void MainWindow::showTxCode(quint8 tx_code){
 
     last_code = tx_code;
     ui->comboBox->setCurrentIndex(tx_code);
-    emit sigChangeAmuChannel(tx_code); //TODO
+    emit sigChangeAmuChannel(tx_code);
 }
 

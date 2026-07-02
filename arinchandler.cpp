@@ -20,14 +20,16 @@ void ArincHandler::start(){
         return;
     }
     registerHandlers();
-    connect(transport_.get(), &IArincTransport::arincWordReceived, this, &ArincHandler::receivedWord);
+    connect(transport_.get(), &IArincTransport::arincWordReceived,
+            this, &ArincHandler::receivedWord,
+            Qt::DirectConnection);
     qDebug() << "Transport receive signal connected";
 
     timer_amu_tx = new QTimer(this);
     timer_amu_tx->setTimerType(Qt::PreciseTimer);
     timer_amu_tx->setSingleShot(true);
     connect(timer_amu_tx, &QTimer::timeout, this, &ArincHandler::sendAmuWord);
-    //timer_amu_tx->start(5);
+    //timer_amu_tx->start(9);
 
 }
 
@@ -62,11 +64,30 @@ void ArincHandler::errorsDecode(quint16 errors, bool is_first_16){
     }
     else{
         for (int i = 16; i < 20; ++i)
-            err_array[i] = static_cast<quint8>((errors >> i - 16) & 0x01);
+            err_array[i] = static_cast<quint8>((errors >> (i - 16)) & 0x01);
     }
 
     emit sigShowErrors(err_array);
 }
+
+void ArincHandler::changePinProg(int bit, bool state){
+    if (state)
+        amu_pin_prog |= 1 << bit;
+    else
+        amu_pin_prog &= ~(1 << bit);
+}
+
+void ArincHandler::changeSelCal(int chan_idx, bool state){
+    if (state)
+        amu_channel |= 1 << chan_idx;
+    else
+        amu_channel &= ~(1 << chan_idx);
+}
+
+void ArincHandler::changeMechState(quint8 state){amu_mech_state=state;}
+void ArincHandler::changeAttState(quint8 state){amu_att_state=state;}
+//void ArincHandler::changeVoiceState(quint8 state){amu_voice_state=state;}
+void ArincHandler::changeAmuChannel(quint8 tx_code){amu_channel=tx_code;}
 
 void ArincHandler::sendAmuWord(){
     quint8 label = reverceBits(0301);
@@ -80,7 +101,7 @@ void ArincHandler::sendAmuWord(){
 
     transport_->sendWord(word);
 
-    qDebug() << QTime::currentTime();
+    qDebug() << "[Wamu Send] " << QTime::currentTime();
 }
 
 QVector<quint8> ArincHandler::decodeBaseWord(QByteArray raw_data){
@@ -115,8 +136,6 @@ QVector<quint8> ArincHandler::decodeBaseWord(QByteArray raw_data){
     return ret;
 }
 
-void ArincHandler::changeAmuChannel(quint8 chan_code){amu_channel = chan_code;}
-
 void ArincHandler::registerHandlers(){
     handlers_[0300] = [this](QByteArray data){
         QDataStream stream(data);
@@ -130,6 +149,8 @@ void ArincHandler::registerHandlers(){
         emit sigShowPN(acp_id);
 
         errorsDecode(errors_16, true);
+
+        qDebug() << "[W300 Received] " << QTime::currentTime();
 
         sendAmuWord();
         timer_amu_tx->start(5);
@@ -209,7 +230,7 @@ void ArincHandler::registerHandlers(){
         emit sigShowChanState("LS", params[PARAMS_INDX::CHAN_STATE], params[PARAMS_INDX::VOLUME]);
     };
 
-    handlers_[0220] = [this](QByteArray data){qDebug() << "Empty handler label 220";};
+    handlers_[0220] = [this](QByteArray data){/*qDebug() << "Empty handler label 220";*/};
 }
 
 

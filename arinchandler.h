@@ -66,7 +66,12 @@ private:
 public slots:
     void receivedWord(QByteArray word);
     void sendAmuWord();
-    void changeAmuChannel(quint8 chan_code);
+    void changeAmuChannel(quint8 tx_code);
+    void changePinProg(int bit, bool state);
+    void changeSelCal(int chan_idx, bool state);
+    void changeMechState(quint8 state);
+    void changeAttState(quint8 state);
+    //void changeVoiceState(quint8 state);
 signals:
     void sigVoice(quint8 state);
     void sigReset(quint8 state);
