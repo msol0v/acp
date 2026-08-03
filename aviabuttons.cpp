@@ -11,7 +11,8 @@ AviaButtonBase::AviaButtonBase(QWidget *parent)
     setCheckable(true); // Включаем режим триггера (фиксируемой кнопки) из коробки
 }
 
-void AviaButtonBase::drawBase(QPainter &p) {
+void AviaButtonBase::drawBase(QPainter &p)
+{
     double w = width();
     double h = height();
     bool checked = isChecked(); // Используем метод встроенный в QPushButton
@@ -50,7 +51,6 @@ void AviaButtonBase::drawBase(QPainter &p) {
     }
 }
 
-
 // =========================================================
 // Реализация AviaCallButton
 // =========================================================
@@ -67,20 +67,44 @@ AviaCallButton::AviaCallButton(QWidget *parent, const QString &text)
     setCheckable(true);
 }
 
-void AviaCallButton::startTextBlink() { m_textBlinkEnabled = true; update(); }
-void AviaCallButton::stopTextBlink() { m_textBlinkEnabled = false; m_textBlinkVisible = true; update(); }
+void AviaCallButton::startTextBlink()
+{
+    m_textBlinkEnabled = true;
+    update();
+}
+void AviaCallButton::stopTextBlink()
+{
+    m_textBlinkEnabled = false;
+    m_textBlinkVisible = true;
+    update();
+}
 
-void AviaCallButton::setBlinkVisible(bool state) {
-    if (!m_textBlinkEnabled) return;
+void AviaCallButton::setBlinkVisible(bool state)
+{
+    if (!m_textBlinkEnabled)
+        return;
     m_textBlinkVisible = state;
     update();
 }
 
-void AviaCallButton::barsOn() { m_barsOn = true; update(); }
-void AviaCallButton::barsOff() { m_barsOn = false; update(); }
-void AviaCallButton::setBars(bool state) { m_barsOn = state; update(); }
+void AviaCallButton::barsOn()
+{
+    m_barsOn = true;
+    update();
+}
+void AviaCallButton::barsOff()
+{
+    m_barsOn = false;
+    update();
+}
+void AviaCallButton::setBars(bool state)
+{
+    m_barsOn = state;
+    update();
+}
 
-void AviaCallButton::paintEvent(QPaintEvent *event) {
+void AviaCallButton::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
@@ -162,7 +186,6 @@ void AviaCallButton::paintEvent(QPaintEvent *event) {
     }
 }
 
-
 // =========================================================
 // Реализация AviaTextButton
 // =========================================================
@@ -172,7 +195,8 @@ AviaTextButton::AviaTextButton(QWidget *parent, const QString &text)
     setText(text); // Используем стандартный метод QPushButton
 }
 
-void AviaTextButton::paintEvent(QPaintEvent *event) {
+void AviaTextButton::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
@@ -189,23 +213,37 @@ void AviaTextButton::paintEvent(QPaintEvent *event) {
     p.drawText(text_rect, Qt::AlignCenter, text()); // Передаем встроенный метод text()
 }
 
-
 // =========================================================
 // Реализация AviaDualTextButton
 // =========================================================
-AviaDualTextButton::AviaDualTextButton(QWidget *parent, const QString &top_text, const QString &bottom_text)
+AviaDualTextButton::AviaDualTextButton(QWidget *parent,
+                                       const QString &top_text,
+                                       const QString &bottom_text)
     : AviaButtonBase(parent)
     , m_topText(top_text)
     , m_bottomText(bottom_text)
     , m_topLight(false)
 {}
 
-void AviaDualTextButton::topOn(quint8 state) { m_topLight = bool(state); update(); }
+void AviaDualTextButton::topOn(quint8 state)
+{
+    m_topLight = bool(state);
+    update();
+}
 
-void AviaDualTextButton::setTopText(const QString &text) { m_topText = text; update(); }
-void AviaDualTextButton::setBottomText(const QString &text) { m_bottomText = text; update(); }
+void AviaDualTextButton::setTopText(const QString &text)
+{
+    m_topText = text;
+    update();
+}
+void AviaDualTextButton::setBottomText(const QString &text)
+{
+    m_bottomText = text;
+    update();
+}
 
-void AviaDualTextButton::paintEvent(QPaintEvent *event) {
+void AviaDualTextButton::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
