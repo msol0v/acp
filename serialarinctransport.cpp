@@ -1,8 +1,15 @@
-#include "iarinctransport.h"
+#include "serialarinctransport.h"
 
-#include <QThread>
+static inline quint8 reverceBits(quint8 b)
+{
+    b = ((b & 0xF0) >> 4) | ((b & 0x0F) << 4);
+    b = ((b & 0xCC) >> 2) | ((b & 0x33) << 2);
+    b = ((b & 0xAA) >> 1) | ((b & 0x55) << 1);
+    return b;
+}
 
-bool SerialArincTransport::open(){
+bool SerialArincTransport::open()
+{
     QString port_name = "COM3"; //TODO Сделать выгрузку из конфига
     serial_ = new QSerialPort(this);
     serial_->setBaudRate(115200);
@@ -10,12 +17,12 @@ bool SerialArincTransport::open(){
     connect(serial_, &QSerialPort::readyRead, this, &SerialArincTransport::onReadyRead);
     if (serial_->open(QIODevice::ReadWrite))
         qDebug() << "ARINC port open success";
-    else{
+    else {
         qDebug() << "ARINC port open error";
         return false;
     }
 
-    if (!configFizika()){
+    if (!configFizika()) {
         qDebug() << "Error config Fizika";
         return false;
     }
@@ -23,16 +30,17 @@ bool SerialArincTransport::open(){
     return true;
 }
 
-bool SerialArincTransport::configFizika(){
+bool SerialArincTransport::configFizika()
+{
     waitingVersion_ = true;
     QEventLoop loop;
     QTimer timer;
     timer.setSingleShot(true);
-    connect(this, &SerialArincTransport::serviceMessageReceived, &loop, [&](QByteArray line){
+    connect(this, &SerialArincTransport::serviceMessageReceived, &loop, [&](QByteArray line) {
         if (line.contains("ver"))
             loop.quit();
     });
-    connect(&timer,&QTimer::timeout, &loop, &QEventLoop::quit);
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
 
     QByteArray version = QByteArray("version\n");
     serial_->write(version);
@@ -45,14 +53,19 @@ bool SerialArincTransport::configFizika(){
     return true;
 }
 
-bool SerialArincTransport::close(){
+bool SerialArincTransport::close()
+{
     serial_->close();
     return true;
 }
 
-bool SerialArincTransport::sendWord(quint32 word){
+bool SerialArincTransport::sendWord(quint32 word)
+{
     if (!serial_->isOpen())
         return false;
+
+    // Физика сама не умеет переворачивать лейбл
+    word = (word & 0xFFFFFF00) | reverceBits(static_cast<quint8>(word));
 
     QString message = "send 1 " + QString::number(word, 16).toUpper().rightJustified(8, '0') + "\n";
     serial_->write(message.toUtf8());
@@ -60,15 +73,29 @@ bool SerialArincTransport::sendWord(quint32 word){
     return true;
 }
 
-void SerialArincTransport::onReadyRead(){
-    while (serial_->canReadLine())
-    {
-        QByteArray line = serial_->readLine();
-        if (line.startsWith("dat")){
-            QByteArray word = line.mid(4,4);
+void SerialArincTransport::enableSending()
+{
+
+}
+
+void SerialArincTransport::stopSending()
+{
+
+}
+
+void SerialArincTransport::onReadyRead()
+{
+    QByteArray bWord, line;
+    quint32 word;
+    while (serial_->canReadLine()) {
+        line = serial_->readLine();
+        if (line.startsWith("dat")) {
+            bWord = line.mid(4, 4);
+            QDataStream stream(bWord);
+            stream >> word;
+            word = (word & 0xFFFFFF00) | (reverceBits(static_cast<quint8>(word)));
             emit arincWordReceived(word);
-        }
-        else
+        } else
             emit serviceMessageReceived(line);
     }
 }

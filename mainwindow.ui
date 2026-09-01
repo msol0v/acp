@@ -397,10 +397,10 @@ QComboBox QAbstractItemView {
    <widget class="QFrame" name="workArea_2">
     <property name="geometry">
      <rect>
-      <x>1230</x>
+      <x>1240</x>
       <y>20</y>
-      <width>501</width>
-      <height>301</height>
+      <width>491</width>
+      <height>291</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -419,6 +419,23 @@ QComboBox QAbstractItemView {
      <enum>QFrame::Shape::StyledPanel</enum>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="1" column="5">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="lblADF1_7">
+         <property name="text">
+          <string>ADF2</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_4" native="true"/>
+       </item>
+      </layout>
+     </item>
      <item row="0" column="2" colspan="2">
       <widget class="QLabel" name="lblADF1_3">
        <property name="maximumSize">
@@ -452,23 +469,6 @@ QComboBox QAbstractItemView {
        </item>
       </layout>
      </item>
-     <item row="1" column="1" colspan="2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QLabel" name="lblADF1_5">
-         <property name="text">
-          <string>HF1</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_2" native="true"/>
-       </item>
-      </layout>
-     </item>
      <item row="1" column="3" colspan="2">
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -486,29 +486,12 @@ QComboBox QAbstractItemView {
        </item>
       </layout>
      </item>
-     <item row="1" column="5">
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QLabel" name="lblADF1_7">
-         <property name="text">
-          <string>ADF2</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_4" native="true"/>
-       </item>
-      </layout>
-     </item>
      <item row="2" column="0" colspan="2">
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
         <widget class="QLabel" name="lblADF1_9">
          <property name="text">
-          <string>MLS</string>
+          <string>RES/MLS</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -517,6 +500,23 @@ QComboBox QAbstractItemView {
        </item>
        <item>
         <widget class="AviaLampToggleButton" name="lampPlaceholder_5" native="true"/>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="lblADF1_5">
+         <property name="text">
+          <string>HF1</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_2" native="true"/>
        </item>
       </layout>
      </item>
@@ -538,21 +538,7 @@ QComboBox QAbstractItemView {
       </layout>
      </item>
      <item row="2" column="4" colspan="2">
-      <layout class="QVBoxLayout" name="verticalLayout_9">
-       <item>
-        <widget class="QLabel" name="lblADF1_11">
-         <property name="text">
-          <string>VA/PF</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_7" native="true"/>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout_9"/>
      </item>
     </layout>
    </widget>
@@ -1080,7 +1066,7 @@ QComboBox QAbstractItemView {
          <item>
           <widget class="QLabel" name="lbl_faults_11">
            <property name="text">
-            <string>Reserved</string>
+            <string>Keyboard/PinProg?</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -2266,7 +2252,7 @@ VOICE</string>
            <item>
             <widget class="QLabel" name="lblADF1_2">
              <property name="text">
-              <string>MLS</string>
+              <string>RES/MLS</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -2586,6 +2572,9 @@ VOICE</string>
      </widget>
     </widget>
     <widget class="QWidget" name="page_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <widget class="QFrame" name="panelFrame_2">
       <property name="geometry">
        <rect>
@@ -4019,6 +4008,66 @@ R</string>
       </layout>
      </widget>
     </widget>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>830</y>
+      <width>251</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox {
+    color: #FFE196;
+    font-size: 18px;
+    font-weight: bold;
+    spacing: 8px;
+}
+
+/* Стилизация самого индикатора (квадрата) */
+QCheckBox::indicator {
+    width: 25px;
+    height: 25px;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                                      stop:0 #1a1e26, stop:1 #0f1117);
+    border: 2px solid #2e3544;
+    border-radius: 4px;
+}
+
+/* Состояние при наведении */
+QCheckBox::indicator:hover {
+    border: 2px solid #FFE196;
+}
+
+/* Нажатое состояние */
+QCheckBox::indicator:pressed {
+    background-color: #0a0b0e;
+}
+
+/* Состояние CHECKED (выбран) */
+QCheckBox::indicator:checked {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                                      stop:0 #ffe196, stop:1 #d4af37);
+    border: 2px solid #fff3c4;
+    /* Опционально: если вы используете SVG или иконку галочки */
+    /* image: url(:/icons/check.svg); */
+}
+
+/* Отключенное состояние (Disabled) */
+QCheckBox:disabled {
+    color: #555b6e;
+}
+
+QCheckBox::indicator:disabled {
+    border: 2px solid #222630;
+    background-color: #12141a;
+}</string>
+    </property>
+    <property name="text">
+     <string>Disable ARINC 429 Tx</string>
+    </property>
    </widget>
   </widget>
  </widget>

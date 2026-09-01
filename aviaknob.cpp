@@ -1,5 +1,7 @@
 #include "aviaknob.h"
 
+#include <cmath>
+
 AviaKnob::AviaKnob(QWidget *parent)
     : QDial(parent)
     , m_startAngle(135.0)
@@ -15,7 +17,8 @@ AviaKnob::AviaKnob(QWidget *parent)
     setFixedSize(78, 78);
 }
 
-void AviaKnob::setRange(int minimum, int maximum) {
+void AviaKnob::setRange(int minimum, int maximum)
+{
     QDial::setRange(minimum, maximum);
 
     if (value() < minimum) {
@@ -27,32 +30,42 @@ void AviaKnob::setRange(int minimum, int maximum) {
     update();
 }
 
-void AviaKnob::setStartValue() {
+void AviaKnob::setStartValue()
+{
     setValue(minimum());
     update();
 }
 
-void AviaKnob::setAngleRange(double start_angle, double span_angle) {
+void AviaKnob::setAngleRange(double start_angle, double span_angle)
+{
     m_startAngle = start_angle;
     m_spanAngle = span_angle;
     update();
 }
 
-double AviaKnob::valueRatio() const {
+double AviaKnob::valueRatio() const
+{
     int minVal = minimum();
     int maxVal = maximum();
     int val = value();
 
-    if (maxVal == minVal) {
+    if (maxVal <= minVal) {
         return 0.0;
     }
 
     // Ограничиваем значение в рамках [minimum, maximum]
     val = std::max(minVal, std::min(val, maxVal));
-    return static_cast<double>(val - minVal) / (maxVal - minVal);
+
+    // Вычисляем логарифмический коэффициент от 0.0 до 1.0
+    // std::log1p(x) вычисляет ln(1 + x) без потери точности для малых x
+    double logCurrent = std::log1p(static_cast<double>(val - minVal));
+    double logMax = std::log1p(static_cast<double>(maxVal - minVal));
+
+    return logCurrent / logMax;
 }
 
-void AviaKnob::on(const QColor &color) {
+void AviaKnob::on(const QColor &color)
+{
     m_lightOn = true;
     if (color.isValid()) {
         m_lightColor = color;
@@ -60,12 +73,14 @@ void AviaKnob::on(const QColor &color) {
     update();
 }
 
-void AviaKnob::off() {
+void AviaKnob::off()
+{
     m_lightOn = false;
     update();
 }
 
-void AviaKnob::paintEvent(QPaintEvent *event) {
+void AviaKnob::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
 
     QPainter p(this);
@@ -126,9 +141,15 @@ void AviaKnob::paintEvent(QPaintEvent *event) {
         QRectF light(cx - size * 0.27, cy - size * 0.27, size * 0.54, size * 0.54);
         QRadialGradient light_grad(QPointF(cx, cy), size * 0.30);
 
-        light_grad.setColorAt(0.0, QColor(m_lightColor.red(), m_lightColor.green(), m_lightColor.blue(), 230));
-        light_grad.setColorAt(0.45, QColor(m_lightColor.red(), m_lightColor.green(), m_lightColor.blue(), 150));
-        light_grad.setColorAt(0.8, QColor(m_lightColor.red(), m_lightColor.green(), m_lightColor.blue(), 70));
+        light_grad
+            .setColorAt(0.0,
+                        QColor(m_lightColor.red(), m_lightColor.green(), m_lightColor.blue(), 230));
+        light_grad
+            .setColorAt(0.45,
+                        QColor(m_lightColor.red(), m_lightColor.green(), m_lightColor.blue(), 150));
+        light_grad
+            .setColorAt(0.8,
+                        QColor(m_lightColor.red(), m_lightColor.green(), m_lightColor.blue(), 70));
         light_grad.setColorAt(1.0, QColor(0, 0, 0, 0));
 
         p.setPen(Qt::NoPen);

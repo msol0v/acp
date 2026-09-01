@@ -1,19 +1,20 @@
 #ifndef AVIALAMPS_H
 #define AVIALAMPS_H
 
-#include <QWidget>
-#include <QPushButton>
+#include <QBrush>
 #include <QColor>
-#include <QString>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPen>
-#include <QBrush>
+#include <QPushButton>
 #include <QRadialGradient>
 #include <QRectF>
-#include <QMouseEvent>
+#include <QString>
+#include <QWidget>
 
 // Структура для возврата набора цветов радиального градиента круглой лампы
-struct LampColors {
+struct LampColors
+{
     QColor c1;
     QColor c2;
     QColor c3;
@@ -24,7 +25,8 @@ struct LampColors {
 // =========================================================
 // КРУГЛАЯ АВИАЦИОННАЯ ЛАМПА
 // =========================================================
-class AviaLamp : public QWidget {
+class AviaLamp : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -51,7 +53,8 @@ private:
 // =========================================================
 // ПРЯМОУГОЛЬНАЯ СИГНАЛЬНАЯ ЛАМПА
 // =========================================================
-class AviaRectLamp : public QWidget {
+class AviaRectLamp : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -74,7 +77,8 @@ private:
 // =========================================================
 // КНОПКА С ИНДИКАТОРНОЙ ЛАМПОЙ
 // =========================================================
-class AviaLampToggleButton : public QPushButton {
+class AviaLampToggleButton : public QPushButton
+{
     Q_OBJECT
 
 public:

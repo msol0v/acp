@@ -3,35 +3,40 @@
 
 #include <QMainWindow>
 
+#include <QLabel>
 #include <QThread>
 #include <QVector>
-#include <QLabel>
 
-#include "aviaknob.h"
-#include "aviabuttons.h"
 #include "arinchandler.h"
+#include "aviabuttons.h"
+#include "aviaknob.h"
 
-class ChannelWidgetWrapper : QObject{
+class ChannelWidgetWrapper : QObject
+{
     Q_OBJECT
 public:
     AviaKnob *knob;
     QLabel *label;
 
-    explicit ChannelWidgetWrapper(
-        AviaKnob *chan_knob, QLabel *chan_label, int start_point, QObject *parent=nullptr)
+    explicit ChannelWidgetWrapper(AviaKnob *chan_knob,
+                                  QLabel *chan_label,
+                                  int start_point,
+                                  QObject *parent = nullptr)
         : QObject(parent)
     {
         knob = chan_knob;
         label = chan_label;
         knob->setRange(start_point, 255);
     }
+
 private:
     int start_point;
 };
 
-
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -49,8 +54,8 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    QMap<const QString, ChannelWidgetWrapper*> chan_wrappers_table;
-    QVector<AviaCallButton*> tx_code_btns_table;
+    QMap<const QString, ChannelWidgetWrapper *> chan_wrappers_table;
+    QVector<AviaCallButton *> tx_code_btns_table;
     QButtonGroup *btnGroup;
 
     QTimer *blink_timer;
@@ -61,6 +66,8 @@ public slots:
     void showChanStates(const QString chan_name, quint8 chan_state, quint8 volume_state);
     void showTxCode(quint8 tx_code);
     void toggledBtn(QAbstractButton *button, bool checked);
+    void txComboBoxCallback(quint32 idx);
+
 
 signals:
     void btnBlink(bool state);

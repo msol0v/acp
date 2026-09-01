@@ -12,6 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets SerialPort)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets SerialPort)
 
+set(DRIVER_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/pci429_driver/
+)
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -24,11 +28,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         arinchandler.h arinchandler.cpp
-        iarinctransport.h iarinctransport.cpp
+        ${DRIVER_DIR}/OpenPCI3byIndex.cpp
         aviaknob.h aviaknob.cpp
         aviabuttons.h aviabuttons.cpp
         aviaverticaltoggle.h aviaverticaltoggle.cpp
         avialamps.h avialamps.cpp
+        serialarinctransport.h serialarinctransport.cpp
+        iarinctransport.h
+        pciarinctransport.h pciarinctransport.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ACP_Panel APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -48,9 +55,9 @@ else()
     endif()
 endif()
 
-target_link_libraries(ACP_Panel PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::SerialPort)
+target_link_libraries(ACP_Panel PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::SerialPort setupapi)
 
-target_include_directories(ACP_Panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(ACP_Panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/pci429_driver/)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -76,3 +83,4 @@ install(TARGETS ACP_Panel
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(ACP_Panel)
 endif()
+

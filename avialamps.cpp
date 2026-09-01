@@ -11,44 +11,62 @@ AviaLamp::AviaLamp(QWidget *parent)
     setFixedSize(50, 50);
 }
 
-void AviaLamp::setOn(bool state) {
-    if (m_on == state) return;
+void AviaLamp::setOn(bool state)
+{
+    if (m_on == state)
+        return;
     m_on = state;
     update();
 }
 
-bool AviaLamp::isOn() const { return m_on; }
+bool AviaLamp::isOn() const
+{
+    return m_on;
+}
 
-void AviaLamp::setColor(const QString &color) {
-    if (m_color == color) return;
+void AviaLamp::setColor(const QString &color)
+{
+    if (m_color == color)
+        return;
     m_color = color;
     update();
 }
 
-void AviaLamp::mousePressEvent(QMouseEvent *event) {
+void AviaLamp::mousePressEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton) {
         emit clicked();
     }
     QWidget::mousePressEvent(event);
 }
 
-LampColors AviaLamp::getColors() const {
+LampColors AviaLamp::getColors() const
+{
     if (m_color == "red") {
         if (m_on) {
-            return { QColor(0xff5a4f), QColor(0xa8241c), QColor(0x2a0a08), QColor(255, 80, 60, 60), true };
+            return {QColor(0xff5a4f),
+                    QColor(0xa8241c),
+                    QColor(0x2a0a08),
+                    QColor(255, 80, 60, 60),
+                    true};
         } else {
-            return { QColor(0x3a1a18), QColor(0x1a0a09), QColor(0x070303), QColor(), false };
+            return {QColor(0x3a1a18), QColor(0x1a0a09), QColor(0x070303), QColor(), false};
         }
     } else { // green
         if (m_on) {
-            return { QColor(0x6cff8f), QColor(0x1f8f4a), QColor(0x0a2a16), QColor(80, 255, 140, 60), true };
+            return {QColor(0x6cff8f),
+                    QColor(0x1f8f4a),
+                    QColor(0x0a2a16),
+                    QColor(80, 255, 140, 60),
+                    true};
         } else {
-            return { QColor(0x2a332d), QColor(0x121615), QColor(0x070909), QColor(), false };
+            return {QColor(0x2a332d), QColor(0x121615), QColor(0x070909), QColor(), false};
         }
     }
 }
 
-void AviaLamp::paintEvent(QPaintEvent *event) {
+void AviaLamp::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
@@ -97,7 +115,6 @@ void AviaLamp::paintEvent(QPaintEvent *event) {
     }
 }
 
-
 // =========================================================
 // Реализация AviaRectLamp (Прямоугольное табло)
 // =========================================================
@@ -110,12 +127,28 @@ AviaRectLamp::AviaRectLamp(QWidget *parent)
     setFixedSize(59, 30);
 }
 
-void AviaRectLamp::on() { m_on = true; update(); }
-void AviaRectLamp::off() { m_on = false; update(); }
-void AviaRectLamp::setState(bool state) { m_on = state; update(); }
-bool AviaRectLamp::isOn() const { return m_on; }
+void AviaRectLamp::on()
+{
+    m_on = true;
+    update();
+}
+void AviaRectLamp::off()
+{
+    m_on = false;
+    update();
+}
+void AviaRectLamp::setState(bool state)
+{
+    m_on = state;
+    update();
+}
+bool AviaRectLamp::isOn() const
+{
+    return m_on;
+}
 
-void AviaRectLamp::paintEvent(QPaintEvent *event) {
+void AviaRectLamp::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
@@ -138,14 +171,16 @@ void AviaRectLamp::paintEvent(QPaintEvent *event) {
     // Подготовка прозрачности линзы
     QRectF lamp_rect(8.0, 8.0, w - 16.0, h - 16.0);
     int center_alpha = m_on ? 240 : 80;
-    int mid_alpha    = m_on ? 170 : 40;
-    int edge_alpha   = m_on ? 60  : 10;
+    int mid_alpha = m_on ? 170 : 40;
+    int edge_alpha = m_on ? 60 : 10;
     QColor base_color = m_on ? m_colorOn : m_colorOff;
 
     QRadialGradient grad(lamp_rect.center(), std::max(lamp_rect.width(), lamp_rect.height()) * 0.7);
-    grad.setColorAt(0.0, QColor(base_color.red(), base_color.green(), base_color.blue(), center_alpha));
+    grad.setColorAt(0.0,
+                    QColor(base_color.red(), base_color.green(), base_color.blue(), center_alpha));
     grad.setColorAt(0.5, QColor(base_color.red(), base_color.green(), base_color.blue(), mid_alpha));
-    grad.setColorAt(1.0, QColor(base_color.red(), base_color.green(), base_color.blue(), edge_alpha));
+    grad.setColorAt(1.0,
+                    QColor(base_color.red(), base_color.green(), base_color.blue(), edge_alpha));
 
     p.setPen(Qt::NoPen);
     p.setBrush(QBrush(grad));
@@ -162,7 +197,6 @@ void AviaRectLamp::paintEvent(QPaintEvent *event) {
     }
 }
 
-
 // =========================================================
 // Реализация AviaLampToggleButton (Кнопка со встроенной лампой)
 // =========================================================
@@ -176,11 +210,24 @@ AviaLampToggleButton::AviaLampToggleButton(QWidget *parent)
     setCheckable(true); // Родной QPushButton берёт на себя всю работу с m_checked
 }
 
-void AviaLampToggleButton::lampOn() { m_lampOn = true; update(); }
-void AviaLampToggleButton::lampOff() { m_lampOn = false; update(); }
-void AviaLampToggleButton::setLamp(bool state) { m_lampOn = state; update(); }
+void AviaLampToggleButton::lampOn()
+{
+    m_lampOn = true;
+    update();
+}
+void AviaLampToggleButton::lampOff()
+{
+    m_lampOn = false;
+    update();
+}
+void AviaLampToggleButton::setLamp(bool state)
+{
+    m_lampOn = state;
+    update();
+}
 
-void AviaLampToggleButton::paintEvent(QPaintEvent *event) {
+void AviaLampToggleButton::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);

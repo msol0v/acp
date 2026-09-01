@@ -3,11 +3,10 @@
 AviaVerticalToggle::AviaVerticalToggle(QWidget *parent)
     : QWidget(parent)
     , m_position(0)
-    , m_circlePos(27)   // 27 — координата центральной позиции Y
+    , m_circlePos(27) // 27 — координата центральной позиции Y
 {
     setFixedSize(50, 90);
     setCursor(Qt::PointingHandCursor);
-
 
     m_positions[0] = 27; // Центр
     m_positions[1] = 50; // Низ
@@ -18,20 +17,24 @@ AviaVerticalToggle::AviaVerticalToggle(QWidget *parent)
     m_animation->setDuration(150);
 }
 
-int AviaVerticalToggle::circlePos() const {
+int AviaVerticalToggle::circlePos() const
+{
     return m_circlePos;
 }
 
-void AviaVerticalToggle::setCirclePos(int pos) {
+void AviaVerticalToggle::setCirclePos(int pos)
+{
     m_circlePos = pos;
     update();
 }
 
-int AviaVerticalToggle::position() const {
+int AviaVerticalToggle::position() const
+{
     return m_position;
 }
 
-void AviaVerticalToggle::setPosition(int position) {
+void AviaVerticalToggle::setPosition(int position)
+{
     // Ограничиваем рамками [0, 2]
     position = std::max(0, std::min(2, position));
 
@@ -51,7 +54,8 @@ void AviaVerticalToggle::setPosition(int position) {
     update();
 }
 
-void AviaVerticalToggle::mousePressEvent(QMouseEvent *event) {
+void AviaVerticalToggle::mousePressEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton) {
         // Циклически переключаем: 0 (центр) -> 1 (низ) -> 2 (верх) -> 0 (центр)
         setPosition((m_position + 1) % 3);
@@ -59,7 +63,8 @@ void AviaVerticalToggle::mousePressEvent(QMouseEvent *event) {
     QWidget::mousePressEvent(event);
 }
 
-void AviaVerticalToggle::paintEvent(QPaintEvent *event) {
+void AviaVerticalToggle::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);

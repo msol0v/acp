@@ -1,17 +1,18 @@
 #ifndef AVIAKNOB_H
 #define AVIAKNOB_H
 
-#include <QDial>
+#include <QBrush>
 #include <QColor>
+#include <QDial>
 #include <QPainter>
 #include <QPen>
-#include <QBrush>
+#include <QPointF>
 #include <QRadialGradient>
 #include <QRectF>
-#include <QPointF>
 #include <cmath>
 
-class AviaKnob : public QDial {
+class AviaKnob : public QDial
+{
     Q_OBJECT
 
 public:

@@ -1,15 +1,15 @@
 #ifndef AVIABUTTONS_H
 #define AVIABUTTONS_H
 
-#include <QPushButton>
+#include <QBrush>
 #include <QColor>
-#include <QString>
+#include <QFont>
+#include <QLinearGradient>
 #include <QPainter>
 #include <QPen>
-#include <QBrush>
-#include <QLinearGradient>
-#include <QFont>
+#include <QPushButton>
 #include <QRectF>
+#include <QString>
 
 // Глобальные константы цветов
 const QColor GREEN_ON("#20ff4f");
@@ -22,7 +22,8 @@ const QColor TEXT_WHITE("#f2f2f2");
 // =========================================================
 // БАЗОВАЯ ОТРИСОВКА КОРПУСА
 // =========================================================
-class AviaButtonBase : public QPushButton {
+class AviaButtonBase : public QPushButton
+{
     Q_OBJECT
 
 public:
@@ -35,7 +36,8 @@ protected:
 // =========================================================
 // КНОПКА С ТРЕМЯ ПОЛОСКАМИ И МИГАНИЕМ
 // =========================================================
-class AviaCallButton : public QPushButton {
+class AviaCallButton : public QPushButton
+{
     Q_OBJECT
 
 public:
@@ -43,7 +45,6 @@ public:
 
     void startTextBlink();
     void stopTextBlink();
-
 
     void barsOn();
     void barsOff();
@@ -66,7 +67,8 @@ private:
 // =========================================================
 // ВАРИАНТ 1: Только нижняя надпись
 // =========================================================
-class AviaTextButton : public AviaButtonBase {
+class AviaTextButton : public AviaButtonBase
+{
     Q_OBJECT
 
 protected:
@@ -79,7 +81,8 @@ public:
 // =========================================================
 // ВАРИАНТ 2: Верхняя светящаяся надпись + нижняя статичная
 // =========================================================
-class AviaDualTextButton : public AviaButtonBase {
+class AviaDualTextButton : public AviaButtonBase
+{
     Q_OBJECT
 
 public:
