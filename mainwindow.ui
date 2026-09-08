@@ -432,7 +432,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_4" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_3" native="true"/>
        </item>
       </layout>
      </item>
@@ -465,7 +465,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_1" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_0" native="true"/>
        </item>
       </layout>
      </item>
@@ -482,7 +482,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_3" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_2" native="true"/>
        </item>
       </layout>
      </item>
@@ -499,7 +499,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_5" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_4" native="true"/>
        </item>
       </layout>
      </item>
@@ -516,7 +516,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_2" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_1" native="true"/>
        </item>
       </layout>
      </item>
@@ -533,7 +533,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_6" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_5" native="true"/>
        </item>
       </layout>
      </item>
@@ -580,7 +580,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_8" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_7" native="true"/>
        </item>
       </layout>
      </item>
@@ -597,7 +597,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_9" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_8" native="true"/>
        </item>
       </layout>
      </item>
@@ -614,7 +614,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_10" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_9" native="true"/>
        </item>
       </layout>
      </item>
@@ -631,7 +631,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_11" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_10" native="true"/>
        </item>
       </layout>
      </item>
@@ -648,7 +648,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_12" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_11" native="true"/>
        </item>
       </layout>
      </item>
@@ -665,7 +665,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_13" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_12" native="true"/>
        </item>
       </layout>
      </item>
@@ -682,7 +682,7 @@ QComboBox QAbstractItemView {
         </widget>
        </item>
        <item>
-        <widget class="AviaLampToggleButton" name="lampPlaceholder_14" native="true"/>
+        <widget class="AviaLampToggleButton" name="lampPlaceholder_13" native="true"/>
        </item>
       </layout>
      </item>

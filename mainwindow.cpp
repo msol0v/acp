@@ -38,11 +38,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     //UI slots
     btnGroup = new QButtonGroup(this);
-    quint8 id = 0;
-    for (auto btn : findChildren<AviaLampToggleButton *>()) {
-        btnGroup->addButton(btn, id++);
-    }
     btnGroup->setExclusive(false);
+    // Получаем список всех кнопок
+    auto buttons = findChildren<AviaLampToggleButton *>();
+
+    // Сортируем их по числовому индексу в имени (lampPlaceholder_N)
+    std::sort(buttons.begin(), buttons.end(), [](QObject *a, QObject *b) {
+        int idA = a->objectName().section('_', -1).toInt();
+        int idB = b->objectName().section('_', -1).toInt();
+        return idA < idB;
+    });
+
+    // Добавляем в группу с ID
+    for (auto btn : buttons) {
+        int id = btn->objectName().section('_', -1).toInt();
+        btnGroup->addButton(btn, id);
+    }
     connect(btnGroup, &QButtonGroup::buttonToggled, this, &MainWindow::toggledBtn);
     connect(ui->comboBox, &QComboBox::currentIndexChanged, this, &MainWindow::txComboBoxCallback);
 
