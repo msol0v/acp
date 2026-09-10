@@ -191,3 +191,15 @@ void MainWindow::showTxCode(quint8 tx_code)
     ui->comboBox->setCurrentIndex(tx_code);
     emit sigChangeAmuChannel(tx_code);
 }
+
+void MainWindow::on_actionPCI_triggered()
+{
+    qDebug() << "menu pci";
+}
+
+
+void MainWindow::on_actionSerial_triggered()
+{
+    qDebug() << "menu serial";
+}
+

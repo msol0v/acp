@@ -1,7 +1,10 @@
 #include "pciarinctransport.h"
 #include <QTime>
+#include <QElapsedTimer>
+#include <QDebug>
+#include <QThread>
 
-#define MODE_INT 0
+#define MODE_INT 1
 
 extern HANDLE OpenDeviceByIndex(  DWORD Index, PDWORD pError );
 quint32 wordsAr[256];
@@ -25,7 +28,7 @@ bool PciArincTransport::open(){
     DeviceIoControl(hDevice, DRV2K_PCI429_3_INIT_INT, &hEvent, 4, NULL, 0, &nOutput, NULL);
     hThread = CreateThread(NULL, 0, PciArincTransport::f_INT, this, 0, &dwThreadID);
     std::fill_n(wordsAr,256, 0x8000004C);
-    _puskCyclicWrite(1,3,1, wordsAr);
+    //_puskCyclicWrite(1,3,1, wordsAr);
     _puskAdressRead(1, 0300);
 #elif MODE_INT == 0
     std::fill_n(wordsAr,256, 0x8000004C);
@@ -55,12 +58,11 @@ DWORD WINAPI PciArincTransport::f_INT(LPVOID lpParam) {
     // Получаем указатель на наш объект
     auto *self = static_cast<PciArincTransport*>(lpParam);
     DWORD nOutput = 0;
-    QTime lastTime = QTime::currentTime();
+    //QTime lastTime = QTime::currentTime();
 
-    QVector<quint16> labels = {0300, 0210, 0211, 0212, 0213, 0215, 0217, 0220};
     quint32 word;
-    quint32 words[256] = {0};
-
+    quint32 amuW[1];
+    amuW[0] = 0x8000004C;
     while (self->keepRunning) {
         // Ожидаем событие
         DWORD dwWait = WaitForSingleObject(self->hEvent, 1000);
@@ -73,16 +75,13 @@ DWORD WINAPI PciArincTransport::f_INT(LPVOID lpParam) {
             // qDebug() << lastTime.msecsTo(curT);
             // lastTime = curT;
 
-            if(self->_readWordsArray(1, words)){
-                for (auto label : labels){
-                    //qDebug() << "label:" << QString::number(label, 8) << "  :" << QString::number(words[label], 16);
-                    word = words[label];
-                    emit self->arincWordReceived(word);
-                }
+            self->_singleWrite(1,1,amuW);
+            //QThread::msleep(6);
+            self->_singleWrite(1,1,amuW);
 
-                //emit self->arincWordReceived(words[label]);
-            }
+            word = self->_readWordAddr(1, 0300);
 
+            emit self->arincWordReceived(word);
 
             DeviceIoControl(self->hDevice, DRV2K_PCI429_3_RESET_INT, NULL, 0, NULL, 0, &nOutput, NULL);
 

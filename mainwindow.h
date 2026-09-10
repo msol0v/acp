@@ -68,6 +68,10 @@ public slots:
     void toggledBtn(QAbstractButton *button, bool checked);
     void txComboBoxCallback(quint32 idx);
 
+private slots:
+    void on_actionPCI_triggered();
+
+    void on_actionSerial_triggered();
 
 signals:
     void btnBlink(bool state);

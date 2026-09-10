@@ -4070,6 +4070,34 @@ QCheckBox::indicator:disabled {
     </property>
    </widget>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1920</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuTransport">
+    <property name="title">
+     <string>Transport</string>
+    </property>
+    <addaction name="actionPCI"/>
+    <addaction name="actionSerial"/>
+   </widget>
+   <addaction name="menuTransport"/>
+  </widget>
+  <action name="actionPCI">
+   <property name="text">
+    <string>PCI</string>
+   </property>
+  </action>
+  <action name="actionSerial">
+   <property name="text">
+    <string>Serial</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
