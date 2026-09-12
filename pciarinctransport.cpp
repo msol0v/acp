@@ -68,6 +68,9 @@ DWORD WINAPI PciArincTransport::f_INT(LPVOID lpParam) {
         DWORD dwWait = WaitForSingleObject(self->hEvent, 1000);
 
         if (dwWait == WAIT_OBJECT_0) {
+            // Записываем время пробуждения прерывания
+            self->interruptWakeupTime = std::chrono::high_resolution_clock::now();
+
             ResetEvent(self->hEvent);
             self->_isChannelInt(1);
 
@@ -356,6 +359,16 @@ void PciArincTransport::_singleWrite(quint16 chanNum, quint16 wordsNum, quint32 
         USHORT ArrayNumber = 1; //номер массива (1 или 2)
     } puskParams;
 
+    // Измеряем время от пробуждения прерывания до команды "пуск"
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+        currentTime - interruptWakeupTime
+    );
+
+    qDebug() << "Time from interrupt wakeup to _singleWrite PUSK command:"
+             << duration.count() << "microseconds"
+             << "(" << (duration.count() / 1000.0) << "ms)";
+
     DeviceIoControl(hDevice, DRV2K_PCI429_3_SO_O_PUSK, &puskParams, 4, &error, 2, &nOutput, NULL);
     if (!ok){
         qCritical() << "DeviceIoCintrol failed (_singleWrite) " << GetLastError();
@@ -374,8 +387,8 @@ void PciArincTransport::_puskAdressRead(quint16 chanNum, quint16 wordIntLabel){
     struct {
         USHORT ChanNumber; //номер канала (1..8)
         USHORT ArrayNumber = 1; //номер массива (1 или 2)
-        USHORT InterrParamAddr; //адрес параметра, при поступлении которого формируется прерывание (0..0xff) или иной код , если прерывание не используется
-        USHORT StopParamAddr = 0xFFFF; //адрес параметра, при поступлении которого прием по каналу останавливается (0..0xff) или иной код , если останов не требуется
+        USHORT InterrParamAddr; //адрес параметра, при поступлении которого формируется прерывание (0..0xff) или иной код , если [...]
+        USHORT StopParamAddr = 0xFFFF; //адрес параметра, при поступлении которого прием по каналу останавливается (0..0xff) или ин[...]
     } bufInput;
     bufInput.ChanNumber = chanNum;
     bufInput.InterrParamAddr = wordIntLabel;
@@ -396,8 +409,8 @@ void PciArincTransport::_puskFileRead(quint16 chanNum, quint16 wordIntLabel){
     struct {
         USHORT ChanNumber; //номер канала (1..8)
         USHORT ArrayNumber = 1; //номер массива (1 или 2)
-        USHORT InterrParamAddr; //адрес параметра, при поступлении которого формируется прерывание (0..0xff) или иной код , если прерывание не используется
-        USHORT StopParamAddr = 0xFFFF; //адрес параметра, при поступлении которого прием по каналу останавливается (0..0xff) или иной код , если останов не требуется
+        USHORT InterrParamAddr; //адрес параметра, при поступлении которого формируется прерывание (0..0xff) или иной код , если [...]
+        USHORT StopParamAddr = 0xFFFF; //адрес параметра, при поступлении которого прием по каналу останавливается (0..0xff) или ин[...]
     } bufInput;
     bufInput.ChanNumber = chanNum;
     bufInput.InterrParamAddr = wordIntLabel;
