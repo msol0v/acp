@@ -37,6 +37,7 @@ private:
     QMutex mutex;
     std::thread readerThread;
     std::atomic_bool keepRunning{false};
+    std::chrono::high_resolution_clock::time_point interruptWakeupTime;
     void readerLoop();
 
     HANDLE hDevice;
@@ -52,7 +53,7 @@ private:
     bool _isChannelInt(quint16 chanNumber);
     void _resetInt();
     void _singleWrite(quint16 chanNum, quint16 wordsNum, quint32 wordsArray[]);
-    void _puskAdressRead(quint16 chanNum, quint16 wordIntLabel); // Второй параметр позволяет ращрешить прерывание по определенному лейблу
+    void _puskAdressRead(quint16 chanNum, quint16 wordIntLabel); // Второй параметр позволяет ращрешить прерывание по определенному лей...
     void _puskFileRead(quint16 chanNum, quint16 wordIntLabel);
     void _puskCyclicWrite(quint16 chanNum, quint16 periodMs, quint16 wordsNum, quint32 wordsArray[]);
     bool _sendWordCyclic(quint32 word, quint16 periodMs);
