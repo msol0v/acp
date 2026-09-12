@@ -76,7 +76,7 @@ DWORD WINAPI PciArincTransport::f_INT(LPVOID lpParam) {
             // lastTime = curT;
 
             self->_singleWrite(1,1,amuW);
-            //QThread::msleep(6);
+            QThread::msleep(6);
             self->_singleWrite(1,1,amuW);
 
             word = self->_readWordAddr(1, 0300);
@@ -172,13 +172,13 @@ bool PciArincTransport::_initDevice(PCI429_Config_t *chanConfig){
 
     WINBOOL status = DeviceIoControl(hDevice, DRV2K_PCI429_3_INIT, chanConfig, 16, &bufOutput, 2, &nOutput, NULL);
     if (!status){
-        qCritical() << "PCI429: Ошибка инициализации каналов";
+        qCritical() << "PCI429: Error init channels";
         return false;
     }
 
-    qDebug() << "PCI429: Успешная инициализация каналов" << "\r\n"
-             << "Входных каналов: " << bufOutput.SI << " \r\n"
-             << "Выходных каналов: " << bufOutput.SO;
+    qDebug() << "PCI429: Success init channels" << "\r\n"
+             << "Output channels: " << bufOutput.SI << " \r\n"
+             << "Input channels: " << bufOutput.SO;
 
     return true;
 }
@@ -331,7 +331,7 @@ void PciArincTransport::_singleWrite(quint16 chanNum, quint16 wordsNum, quint32 
     memcpy(bufPutWords->param, wordsArray, wordsNum * sizeof(ULONG));
 
     USHORT error = 0;
-    DWORD nbufInputSize = sizeof (bufPutWords);
+    DWORD nbufInputSize = size;
     DWORD nOutput;
     WINBOOL ok = false;
 
@@ -385,7 +385,7 @@ void PciArincTransport::_puskAdressRead(quint16 chanNum, quint16 wordIntLabel){
     DeviceIoControl(hDevice, DRV2K_PCI429_3_SI_A_PUSK, &bufInput, 8, &error, 2, &nOutput, NULL);
 
     if (error > 0){
-        if (error = 1)
+        if (error == 1)
             qCritical() << "Ошибочный номер канала (_puskAdressRead):(DRV2K_PCI429_3_SI_A_PUSK)";
         else
             qCritical() << "Ошибочный номер буфера (_puskAdressRead):(DRV2K_PCI429_3_SI_A_PUSK)";
@@ -407,7 +407,7 @@ void PciArincTransport::_puskFileRead(quint16 chanNum, quint16 wordIntLabel){
     DeviceIoControl(hDevice, DRV2K_PCI429_3_SI_F_PUSK, &bufInput, 8, &error, 2, &nOutput, NULL);
 
     if (error > 0){
-        if (error = 1)
+        if (error == 1)
             qCritical() << "Ошибочный номер канала (_puskAdressRead):(DRV2K_PCI429_3_SI_A_PUSK)";
         else
             qCritical() << "Ошибочный номер буфера (_puskAdressRead):(DRV2K_PCI429_3_SI_A_PUSK)";
@@ -418,7 +418,7 @@ void PciArincTransport::_stopRead(quint16 chanNum){
     USHORT error = 0;
     DWORD nOutput;
     DeviceIoControl(hDevice, DRV2K_PCI429_3_SI_STOP, &chanNum, 2, &error, 2, &nOutput, NULL);
-    if (error = 1)
+    if (error == 1)
         qCritical() << "Ошибочный номер канала (_stopRead):(DRV2K_PCI429_3_SI_STOP)";
 }
 
@@ -427,7 +427,7 @@ void PciArincTransport::_stopWrite(quint16 chanNum){
     DWORD nOutput;
     USHORT chan = chanNum;
     DeviceIoControl(hDevice, DRV2K_PCI429_3_SO_STOP, &chan, 2, &error, 2, &nOutput, NULL);
-    if (error = 1)
+    if (error == 1)
         qCritical() << "Ошибочный номер канала (_stopWrite):(DRV2K_PCI429_3_SO_STOP)";
 }
 
